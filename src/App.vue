@@ -1,13 +1,13 @@
 <template>
   <div>
     <div id="nav">
-      <router-link to="/">Home</router-link>
+      <span> <router-link to="/">首页</router-link>
       |
-      <router-link to="/graphs">Graphs</router-link>
+      <router-link to="/graphs">统计图</router-link>
       |
-      <router-link to="/map">Map</router-link>
-      |
-      <user-name />
+      <router-link to="/map">地图</router-link></span>
+     
+      <span class="username"><user-name /></span>
     </div>
     <router-view />
   </div>
@@ -31,10 +31,15 @@ body {
   color: #2c3e50;
 }
 #nav {
-  padding: 30px;
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+  background-color: aliceblue;
 }
 
 #nav a {
+  font-size: 1.2em;
+  margin: 0 20px;
   font-weight: bold;
   color: #2c3e50;
 }
