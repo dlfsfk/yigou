@@ -1,15 +1,18 @@
 <template>
-  <div>
+  <div class="container">
     <div id="nav">
-      <span> <router-link to="/">首页</router-link>
-      |
-      <router-link to="/graphs">统计图</router-link>
-      |
-      <router-link to="/map">地图</router-link></span>
-     
+      <span>
+        <router-link to="/">首页</router-link>
+        |
+        <router-link to="/graphs">统计图</router-link>
+        |
+        <router-link to="/map">地图</router-link></span
+      >
+
       <span class="username"><user-name /></span>
     </div>
-    <router-view />
+
+      <router-view class="content" />
   </div>
 </template>
 
@@ -30,6 +33,10 @@ body {
   text-align: center;
   color: #2c3e50;
 }
+.container {
+  width: 100%;
+  height: 100%;
+}
 #nav {
   display: flex;
   justify-content: space-around;
@@ -49,5 +56,8 @@ body {
 }
 #nav .ml-5 {
   margin-left: 5px;
+}
+.content {
+  height: calc(100vh - 125px) ;
 }
 </style>
