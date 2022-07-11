@@ -1,13 +1,15 @@
 <template>
   <div class="user-name">
-    <span v-if="status === 'loading'">loading...</span>
+    <span v-if="status === 'loading'">加载中...</span>
 
     <template v-else-if="status === 'login'">
-      <span>{{ user.name }}</span>
+      <span class="nameColor">{{ user.name }}</span>
       <a href="" @click.prevent="handleLoginOut">退出</a>
     </template>
-
-    <router-link v-else to="/login" exact-path>Login</router-link>
+    <span v-else
+      ><router-link to="/login" exact-path>登录</router-link>|
+      <router-link to="/register" exact-path>注册</router-link></span
+    >
   </div>
 </template>
 
@@ -34,5 +36,8 @@ export default {
 .user-name a,
 .user-name span {
   margin-right: 15px;
+}
+.nameColor {
+  color: #2440b3;
 }
 </style>

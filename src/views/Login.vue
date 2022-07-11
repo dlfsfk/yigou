@@ -56,6 +56,9 @@ export default {
 };
 </script>
 <style scoped>
+form{
+  margin: 100px;
+}
 .form-item {
   margin: 1em auto;
   width: 300px;
