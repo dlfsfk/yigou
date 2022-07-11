@@ -1,7 +1,8 @@
 <template>
-<div>
-  <h1>Home Page</h1>
-  <div style="margin-bottom: 150px;" class="banner">
+<div id="home">
+  <div style="height: 25px;"></div>
+  <h1 id="title">E&nbsp;&nbsp;购</h1>
+  <div style="margin-bottom: 150px; margin-top: 100px;" class="banner">
     <a-input-group compact>
       <a-select default-value="湖北">
         <a-select-option value="Hubei">
@@ -65,6 +66,19 @@ export default {
   },
 };
 </script>
+
+<style>
+	#home{
+		background-image: url(../assets/banner.jpg);
+		height:600px;
+	}
+	#title{
+		font-size: 50px;
+		font-family: Helvetica, ‘Hiragino Sans GB’, ‘Microsoft Yahei’, ‘微软雅黑’, Arial, sans-serif;
+		color: #FFF;
+		text-shadow: 1px 1px 10px black;
+	}
+</style>
 
 
 
