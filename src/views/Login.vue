@@ -1,20 +1,30 @@
 <template>
-  <form @submit.prevent="handleSubmit">
-    <div class="form-item">
-      <label>账号：</label>
-      <input type="text" v-model="loginId" />
-    </div>
-    <div class="form-item">
-      <label>密码：</label>
-      <input type="password" autocomplete="new-password" v-model="loginPwd" />
-    </div>
-    <div class="form-item">
-      <label></label>
-      <button :disabled="loading">
-        {{ loading ? "loading..." : "登录" }}
-      </button>
-    </div>
-  </form>
+  <div class="container">
+	  <form @submit.prevent="handleSubmit" class="lform">
+		<div class="title">
+			<h3> 账号登录 </h3>
+			<p>
+				还没帐号?
+				<a href="">
+							<span id="login_btn"> 注册 </span>
+				</a>
+			</p>
+		</div>	
+	    <div class="form-item">
+	      <label>账号：</label>
+	      <input type="text" v-model="loginId" />
+	    </div>
+	    <div class="form-item">
+	      <label>密码：</label>
+	      <input type="password" autocomplete="new-password" v-model="loginPwd" />
+	    </div>
+	    <div class="form-item">
+	      <button :disabled="loading">
+	        {{ loading ? "loading..." : "登录" }}
+	      </button>
+	    </div>
+	  </form>
+  </div>
 </template>
 <script>
 import { mapState } from "vuex";
@@ -56,11 +66,51 @@ export default {
 };
 </script>
 <style scoped>
-form{
-  margin: 100px;
+.container{
+	position: fixed;
+	width:100%;
+	/* background-image: url(../assets/banner.jpg); */
+	height: 100%;
+	background:rgba(0,0,0,.1);
+}
+.lform{
+	margin: 100px auto;
+	width: 400px;
+	border-radius: 10px;
+	background: rgba(255, 255, 255, 0.5);
+	overflow: hidden;
+	padding: 30px;
+	display: flex;
+	flex-direction: column;
+}
+.title{
+	width:450px;
+}
+.title h3{
+	font-size: 30px;
+	color: #000;
+	font-family: PingFang-SC-Regular,Helvetica,"Microsoft Yahei","微软雅黑";
+	margin: 0px;
+	padding-left: 30px;
+	text-align: left;
+	font-weight: bold;
+}
+.title p #login_btn{
+	font-size:14px;
+	font-family: PingFang-SC-Regular,Helvetica,"Microsoft Yahei","微软雅黑";
+}
+.title p{
+	text-align: left;
+	margin-left: 30px;
+	color: #9B9B9B;
+}
+#login_btn{
+	margin-left: 10px;
+	color: #2e58FF;
 }
 .form-item {
-  margin: 1em auto;
+  /* margin: 1em auto; */
+  padding: 15px;
   width: 300px;
   display: flex;
   align-items: center;
