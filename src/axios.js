@@ -1,19 +1,15 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: 'http://localhost:8080/',
+  baseURL: 'http://127.0.0.1:5000/',
+  headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 });
-instance.interceptors.request.use((config) => {
-  if (config.url.includes('/passport')) {
-    return config;
-  }
-  return {
-    ...config,
-    params: {
-      ...config.params,
-    },
-  };
-}, (error) => Promise.reject(error));
+axios.interceptors.request.use((config) => {
+  console.log(config);
+  return config;
+}, (error) => {
+  return Promise.reject(error);
+});
 
 instance.interceptors.response.use((response) => {
   if (response.data.status === 'fail') {

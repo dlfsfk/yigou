@@ -1,3 +1,4 @@
+import axios from '@/axios';
 function delay(duration) {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -8,14 +9,20 @@ function delay(duration) {
 
 export async function login(loginId, loginPwd) {
   await delay(1000);
-  if (loginId === "admin" && loginPwd === "123123") {
-    const user = {
+  let result = axios.post('/login', {
+    params: {
       loginId,
-      name: "管理员",
-    };
-    localStorage.setItem("user", JSON.stringify(user));
-    return user;
-  }
+      loginPwd
+    }
+  });
+  // if (loginId === "admin" && loginPwd === "123123") {
+  //   const user = {
+  //     loginId,
+  //     name: "管理员",
+  //   };
+  //   localStorage.setItem("user", JSON.stringify(user));
+  //   return user;
+  // }
   return null;
 }
 
