@@ -9,12 +9,15 @@ function delay(duration) {
 
 export async function login(loginId, loginPwd) {
   await delay(1000);
-  let result = axios.post('/login', {
-    params: {
-      loginId,
-      loginPwd
-    }
+  let user = await axios.post('/login', {
+    loginId,
+    loginPwd
   });
+  if (user) {
+    localStorage.setItem("user", JSON.stringify(user));
+    return user;
+  }
+
   // if (loginId === "admin" && loginPwd === "123123") {
   //   const user = {
   //     loginId,
@@ -34,8 +37,5 @@ export async function loginOut() {
 export async function whoAmI() {
   await delay(1000);
   const user = localStorage.getItem("user");
-  if (user) {
-    return JSON.parse(user);
-  }
-  return null;
+  return user ? JSON.parse(user) : null;
 }

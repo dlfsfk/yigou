@@ -38,6 +38,6 @@ export default {
   margin-right: 15px;
 }
 .nameColor {
-  color: #2440b3;
+  color: #666;
 }
 </style>

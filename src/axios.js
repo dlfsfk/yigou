@@ -12,10 +12,10 @@ axios.interceptors.request.use((config) => {
 });
 
 instance.interceptors.response.use((response) => {
-  if (response.data.status === 'fail') {
+  if (response.data.code === 0) {
     return Promise.reject(response.data.msg);
   }
-  return response.data.data;
+  return response.data.result;
 }, (error) => Promise.reject(error));
 
 export default instance;

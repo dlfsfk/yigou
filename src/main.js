@@ -4,6 +4,7 @@ import router from "./router";
 import store from "./store";
 import './plugins/ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
+import './plugins/echarts';
 
 store.dispatch("loginUser/whoAmI");
 new Vue({
