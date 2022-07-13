@@ -1,5 +1,8 @@
 <template>
-  <h1>地图</h1>
+  <div class="container">
+    <h1>地图</h1>
+    <div>该模块还在维护请耐心等待</div>
+  </div>
 </template>
 
 <script>
