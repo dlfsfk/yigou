@@ -28,6 +28,9 @@ export async function login(loginId, loginPwd) {
   // }
   return null;
 }
+export async function register(account, password, name) {
+  return axios.post('/register', { account, password, name });
+}
 
 export async function loginOut() {
   await delay(1000);

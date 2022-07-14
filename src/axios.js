@@ -5,7 +5,6 @@ const instance = axios.create({
   headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 });
 axios.interceptors.request.use((config) => {
-  console.log(config);
   return config;
 }, (error) => {
   return Promise.reject(error);

@@ -4,7 +4,23 @@
       <h1 id="title">一燕不能成春，一树不能成林</h1>
       <div class="banner">
         <a-input-group compact>
-          <a-select default-value="宜昌" v-model="city">
+          <a-select default-value="宜昌" v-model="city" style="width:80px">
+            <a-select-option value="恩施"> 恩施 </a-select-option>
+            <a-select-option value="鄂州"> 鄂州 </a-select-option>
+            <a-select-option value="黄冈"> 黄冈 </a-select-option>
+            <a-select-option value="黄石"> 黄石 </a-select-option>
+            <a-select-option value="荆门"> 荆门 </a-select-option>
+            <a-select-option value="荆州"> 荆州 </a-select-option>
+            <a-select-option value="潜江"> 潜江 </a-select-option>
+            <a-select-option value="神农架"> 神农架 </a-select-option>
+            <a-select-option value="十堰"> 十堰 </a-select-option>
+            <a-select-option value="随州"> 随州 </a-select-option>
+            <a-select-option value="天门"> 天门 </a-select-option>
+            <a-select-option value="武汉"> 武汉 </a-select-option>
+            <a-select-option value="襄阳"> 襄阳 </a-select-option>
+            <a-select-option value="咸宁"> 咸宁 </a-select-option>
+            <a-select-option value="仙桃"> 仙桃 </a-select-option>
+            <a-select-option value="孝感"> 孝感 </a-select-option>
             <a-select-option value="宜昌"> 宜昌 </a-select-option>
           </a-select>
           <a-input-search
@@ -53,7 +69,7 @@
       </div>
     </div>
 
-    <div class="charts"><charts /></div>
+    <div class="charts" ><charts /></div>
   </div>
 </template>
 
