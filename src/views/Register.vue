@@ -17,12 +17,8 @@
             {
               rules: [
                 {
-                  type: 'text',
-                  message: 'The input is not valid username!',
-                },
-                {
                   required: true,
-                  message: 'Please input your username!',
+                  message: '请输入你的用户名!',
                 },
               ],
             },
@@ -42,7 +38,7 @@
               rules: [
                 {
                   required: true,
-                  message: 'Please input your password!',
+                  message: '请输入你的密码!',
                 },
                 {
                   validator: validateToNextPassword,
@@ -66,7 +62,7 @@
               rules: [
                 {
                   required: true,
-                  message: 'Please confirm your password!',
+                  message: '请确认你的密码',
                 },
                 {
                   validator: compareToFirstPassword,
@@ -90,7 +86,8 @@
             'phone',
             {
               rules: [
-                { required: true, message: 'Please input your phone number!' },
+                { required: true, message: '请输入你的手机号' },
+                { validator: validatePhone },
               ],
             },
           ]"
@@ -106,28 +103,43 @@
           </a-select>
         </a-input>
       </a-form-item>
-	   <a-form-item
-      v-bind="formItemLayout"
-      label="验证码"
-    >
-      <a-row :gutter="8">
-        <a-col :span="12">
-          <a-input
-            v-decorator="[
-              'captcha',
-              { rules: [{ required: true, message: 'Please input the captcha you got!' }] },
-            ]"
-          />
-        </a-col>
-        <a-col :span="12">
-          <a-button>获得验证码</a-button>
-        </a-col>
-      </a-row>
-    </a-form-item>
+      <a-form-item v-bind="formItemLayout" label="验证码">
+        <a-row :gutter="8">
+          <a-col :span="12">
+            <a-input
+              v-decorator="[
+                'captcha',
+                {
+                  rules: [
+                    {
+                      required: true,
+                      message: '请输入你收到的验证码!',
+                    },
+                    {
+                      validator: validateCaptcha,
+                    },
+                  ],
+                },
+              ]"
+            />
+          </a-col>
+          <a-col :span="12">
+            <a-button @click="getCaptcha">获得验证码</a-button>
+          </a-col>
+        </a-row>
+      </a-form-item>
       <a-form-item v-bind="tailFormItemLayout" class="form-item1">
-        <a-checkbox v-decorator="['agreement', { valuePropName: 'checked' }]">
-          <span style="color: #2e58ff;" >阅读并接受</span>
-        <span> 用户注册协议 </span>
+        <a-checkbox
+          v-decorator="[
+            'agreement',
+            {
+              valuePropName: 'checked',
+              rules: [{ required: true, message: '请同意用户注册协议' }],
+            },
+          ]"
+        >
+          <span style="color: #2e58ff">阅读并接受</span>
+          <span> 用户注册协议 </span>
         </a-checkbox>
       </a-form-item>
       <a-form-item v-bind="tailFormItemLayout" class="form-item">
@@ -140,6 +152,8 @@
 </template>
 
 <script>
+import * as captchaApi from "@/api/captcha.js";
+import * as userApi from "@/api/user.js";
 export default {
   data() {
     return {
@@ -166,6 +180,7 @@ export default {
           },
         },
       },
+      captcha: "",
     };
   },
   beforeCreate() {
@@ -176,7 +191,12 @@ export default {
       e.preventDefault();
       this.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
-          console.log("Received values of form: ", values);
+          // console.log("Received values of form: ", values);
+          userApi.register(values.phone,values.password,values.username).then((res)=>{
+            if(res.success == 1){
+              this.$router.push("/login");
+            }
+          });
         }
       });
     },
@@ -187,7 +207,7 @@ export default {
     compareToFirstPassword(rule, value, callback) {
       const form = this.form;
       if (value && value !== form.getFieldValue("password")) {
-        callback("Two passwords that you enter is inconsistent!");
+        callback("两次输入不一致!");
       } else {
         callback();
       }
@@ -198,6 +218,31 @@ export default {
         form.validateFields(["confirm"], { force: true });
       }
       callback();
+    },
+    validatePhone(rule, value, callback) {
+      const form = this.form;
+      if (value && !this.isPhoneNumber(form.getFieldValue("phone"))) {
+        callback("手机号不合法");
+      } else {
+        callback();
+      }
+    },
+    validateCaptcha(rule, value, callback) {
+      const form = this.form;
+      if (value && form.getFieldValue("captcha") != this.captcha) {
+        callback("验证码错误");
+      } else {
+        callback();
+      }
+    },
+    async getCaptcha() {
+      this.captcha = await captchaApi.getCaptcha(
+        this.form.getFieldValue("phone")
+      );
+    },
+    isPhoneNumber(tel) {
+      var reg = /^0?1[3|4|5|6|7|8][0-9]\d{8}$/;
+      return reg.test(tel);
     },
   },
 };

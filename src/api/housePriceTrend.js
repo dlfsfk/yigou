@@ -1,5 +1,5 @@
 import axios from '@/axios';
 
-export async function getHousePriceTreand(province, city) {
-    return axios.get('/housePriceTreand', { province, city });
+export async function getHousePriceTrend(city, area) {
+    return axios.get('/housePriceTrend', { params: { city, area } });
 };
