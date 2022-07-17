@@ -71,7 +71,6 @@
 
     <div class="charts" v-if="Object.keys(graph).length!=0">
       <Charts v-for="(item,index) in graph.title" :key="item" :options="makeOptions(index)" />
-      <!-- <Charts :options="drop" /> -->
     </div>
   </div>
 </template>

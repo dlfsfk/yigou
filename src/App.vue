@@ -4,6 +4,8 @@
       <span>
         <router-link to="/">首页</router-link>
         |
+        <router-link to="/buildings">楼盘</router-link>
+        |
         <router-link to="/graphs">统计图</router-link>
         |
         <router-link to="/map">地图</router-link></span
@@ -12,7 +14,7 @@
       <span class="username"><user-name /></span>
     </div>
 
-      <router-view class="content" />
+    <router-view class="content" />
   </div>
 </template>
 
@@ -58,6 +60,6 @@ body {
   margin-left: 5px;
 }
 .content {
-  height: calc(100vh - 125px) ;
+  height: calc(100vh - 125px);
 }
 </style>
