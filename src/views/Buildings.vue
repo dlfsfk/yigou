@@ -1,9 +1,17 @@
 <template>
-  <h1>楼盘</h1>
+  <div>
+    <h1>楼盘</h1>
+    <House />
+  </div>
 </template>
 
 <script>
-export default {};
+import House from "../component/House";
+export default {
+  components: {
+    House,
+  },
+};
 </script>
 
 <style></style>

@@ -19,7 +19,6 @@ export default {
     };
   },
   mounted() {
-	 console.log(this.options);
     this.echartsinstance = this.$echarts.init(this.$refs.container);
     this.echartsinstance.setOption(this.options);
   },

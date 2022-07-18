@@ -31,9 +31,17 @@
             @search="onSearch"
           />
         </a-input-group>
+        <a-alert
+          type="error"
+          message="没有数据，请检查城市小区是否输入正确！"
+          banner
+          style="width: 562px; margin-left: 494px"
+          v-if="!hasdata"
+        />
       </div>
-      <div class="subTitle">{{ area }}房产均价走势</div>
-      <div style="opacity: 0.8; width: 80%; margin: auto">
+
+      <div class="subTitle">{{ city + area }}房产均价走势</div>
+      <div style="opacity: 0.8; width: 80%; margin: auto" v-if="hasdata">
         <a-row :gutter="150">
           <a-col :span="6">
             <a-card title="楼盘总数" :bordered="false" :hoverable="false">
@@ -67,10 +75,15 @@
           </a-col>
         </a-row>
       </div>
+      <div v-else class="info">该地区没有房价走势数据</div>
     </div>
 
-    <div class="charts" v-if="Object.keys(graph).length!=0">
-      <Charts v-for="(item,index) in graph.title" :key="item" :options="makeOptions(index)" />
+    <div class="charts" v-if="Object.keys(graphs).length != 0">
+      <Charts
+        v-for="(item, index) in graphs.title"
+        :key="item"
+        :options="makeOptions(index)"
+      />
     </div>
   </div>
 </template>
@@ -95,7 +108,8 @@ export default {
           value: 0,
         },
       },
-	  graph: {},
+      hasdata: false,
+      graphs: {},
     };
   },
   methods: {
@@ -104,23 +118,25 @@ export default {
         this.city,
         this.area
       );
-	  console.log(result);
+      console.log(result);
       this.analyze.totalProperty = result.analyze.totalProperty;
       this.analyze.averagePriceLastWeek = result.analyze.averagePriceLastWeek;
       this.analyze.averagePriceThisWeek = result.analyze.averagePriceThisWeek;
       this.analyze.quoteChange.symbol =
         parseFloat(result.analyze.quoteChange) >= 0 ? true : false;
-      this.analyze.quoteChange.value = Math.abs(parseFloat(result.analyze.quoteChange));
-	  this.graph = result.graph;
+      this.analyze.quoteChange.value = Math.abs(
+        parseFloat(result.analyze.quoteChange)
+      );
+      this.graphs = result.graph;
     },
-	makeOptions(i){
-		return {
+    makeOptions(i) {
+      return {
         // 标题设置
         title: {
-          text: this.city+this.graph.title[i],
+          text: this.city + this.graphs.title[i],
         },
         legend: {
-          data: this.graph.data[i].graphTitle,
+          data: this.graphs.data[i].graphTitle,
         },
         grid: {
           containLabel: true,
@@ -129,7 +145,7 @@ export default {
         animationDurationUpdate: 500,
         series: [
           {
-            name: this.graph.data[i].graphTitle[0],
+            name: this.graphs.data[i].graphTitle[0],
             id: "bar1",
             barCategoryGap: "40%",
             color: "red",
@@ -140,7 +156,7 @@ export default {
               offset: [10, 0],
               fontSize: 12,
             },
-            data:this.graph.data[i].graphData[0],
+            data: this.graphs.data[i].graphData[0],
             symbolRepeat: true,
             symbolSize: [("80%", "60%")],
             universalTransition: {
@@ -151,7 +167,7 @@ export default {
             },
           },
           {
-            name: this.graph.data[i].graphTitle[1],
+            name: this.graphs.data[i].graphTitle[1],
             id: "bar2",
             type: "bar",
             barGap: "10%",
@@ -161,7 +177,7 @@ export default {
               offset: [10, 0],
               fontSize: 12,
             },
-            data: this.graph.data[i].graphData[1].map(x=>Math.abs(x)),
+            data: this.graphs.data[i].graphData[1].map((x) => Math.abs(x)),
             symbolRepeat: true,
             symbolSize: ["80%", "60%"],
             color: "#00bfff",
@@ -180,7 +196,7 @@ export default {
           axisLine: { show: false },
         },
         yAxis: {
-          data: this.graph.data[i].graphName,
+          data: this.graphs.data[i].graphName,
           inverse: true,
           axisLine: { show: false },
           axisTick: { show: false },
@@ -202,12 +218,26 @@ export default {
           },
         },
       };
-	},
+    },
   },
   computed: {
     arrowColor() {
       return this.analyze.quoteChange.symbol ? "#3f8600" : "#FF2D5E";
     },
+  },
+  mounted() {
+    console.log("开始异步请求");
+    housePriceTrendApi.getHousePriceTrend(this.city, this.area).then((res) => {
+      this.analyze.totalProperty = res.analyze.totalProperty;
+      this.analyze.averagePriceLastWeek = res.analyze.averagePriceLastWeek;
+      this.analyze.averagePriceThisWeek = res.analyze.averagePriceThisWeek;
+      this.analyze.quoteChange.symbol =
+        parseFloat(res.analyze.quoteChange) >= 0 ? true : false;
+      this.analyze.quoteChange.value = Math.abs(
+        parseFloat(res.analyze.quoteChange)
+      );
+      this.graphs = res.graph;
+    });
   },
 };
 </script>
@@ -224,6 +254,8 @@ export default {
 .banner {
   margin-bottom: 100px;
   margin-top: 100px;
+  display: flex;
+  flex-direction: column;
 }
 #title {
   padding-top: 20px;
@@ -250,6 +282,11 @@ button.ant-btn:hover {
 .charts {
   display: flex;
   margin: 100px;
+}
+.info {
+  color: #fff;
+  font-size: 1.5em;
+  text-shadow: 1px 1px 10px black;
 }
 </style>
 
