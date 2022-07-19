@@ -15,6 +15,7 @@ export async function login(loginId, loginPwd) {
   });
   if (user) {
     localStorage.setItem("user", JSON.stringify(user));
+    user.name = decodeURI(user.name);
     return user;
   }
   return null;

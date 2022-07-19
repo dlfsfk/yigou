@@ -1,11 +1,6 @@
 <template>
   <div class="container">
-    <a-form
-      id="components-form-demo-normal-login"
-      :form="form"
-      class="lform"
-      @submit="handleSubmit"
-    >
+    <a-form :form="form" class="lform" @submit="handleSubmit">
       <div class="title">
         <h3>账号登录</h3>
         <p>
@@ -28,11 +23,9 @@
           ]"
           placeholder="账号"
         >
-          <a-icon
-            slot="prefix"
-            type="user"
-            style="color: rgba(0, 0, 0, 0.25)"
-          />
+          <a-tooltip title="账号为您注册时用的手机号" slot="prefix">
+            <a-icon type="question-circle-o" />
+          </a-tooltip>
         </a-input>
       </a-form-item>
       <a-form-item>
@@ -40,12 +33,7 @@
           v-decorator="[
             'password',
             {
-              rules: [
-                { required: true, message: '请输入密码' },
-                {
-                  validator: validatePassword,
-                },
-              ],
+              rules: [{ required: true, message: '请输入密码' }],
             },
           ]"
           type="password"
@@ -59,16 +47,16 @@
         </a-input>
       </a-form-item>
       <a-form-item class="loginModel">
-        <button :disabled="loading" class="login-btn">
+        <a-button :disabled="loading" class="login-btn" html-type="submit">
           {{ loading ? "登录中..." : "登录" }}
-        </button>
+        </a-button>
       </a-form-item>
     </a-form>
   </div>
 </template>
 <script>
 import { mapState } from "vuex";
-
+import * as userApi from "@/api/user.js";
 /**
  * {
  *  loading(){
@@ -109,11 +97,17 @@ export default {
         }
       });
     },
-    validatePhone(rule, value, callback) {
+    validateAccount(rule, value, callback) {
       const form = this.form;
       if (value) {
-        console.log(form.getFieldValue("phone"));
-        callback("账号不存在");
+        userApi.checkAccount(form.getFieldValue("account")).then(
+          () => {
+            callback();
+          },
+          (err) => {
+            callback(err);
+          }
+        );
       } else {
         callback();
       }

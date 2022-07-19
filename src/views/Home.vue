@@ -26,7 +26,7 @@
                 type="error"
                 message="没有数据，请检查城市小区是否输入正确！"
                 banner
-                style="width: 562px; margin-left: 494px"
+                style="width: 562px; margin-left: 32px"
                 v-if="!hasdata"
               />
             </div>
@@ -276,6 +276,7 @@ export default {
   margin-top: 100px;
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 #title {
   padding-top: 20px;

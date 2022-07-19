@@ -146,7 +146,7 @@
         </a-checkbox>
       </a-form-item>
       <a-form-item v-bind="tailFormItemLayout" class="form-item">
-        <a-button type="primary" style="width: 100%" html-type="submit">
+        <a-button style="width: 100%" html-type="submit">
           注册
         </a-button>
       </a-form-item>
@@ -212,7 +212,7 @@ export default {
       const form = this.form;
       if (value) {
         userApi.checkName(form.getFieldValue("username")).then(
-          () => {},
+          () => {callback()},
           (err) => {
             callback(err);
           }
@@ -241,12 +241,9 @@ export default {
       if (value && !this.isPhoneNumber(form.getFieldValue("phone"))) {
         callback("手机号不合法");
       }
-      userApi.checkAccount(form.getFieldValue("phone")).then(
-        () => {},
-        (err) => {
-          callback(err);
-        }
-      );
+      else userApi.checkAccount(form.getFieldValue("phone")).then((res) => {
+        callback(res);
+      },()=>{callback();});
     },
     validateCaptcha(rule, value, callback) {
       const form = this.form;
