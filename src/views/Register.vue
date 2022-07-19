@@ -20,6 +20,9 @@
                   required: true,
                   message: '请输入你的用户名!',
                 },
+                {
+                  validator: validateUserName,
+                },
               ],
             },
           ]"
@@ -191,18 +194,32 @@ export default {
       e.preventDefault();
       this.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
-          // console.log("Received values of form: ", values);
-          userApi.register(values.phone,values.password,values.username).then((res)=>{
-            if(res.success == 1){
-              this.$router.push("/login");
-            }
-          });
+          userApi
+            .register(values.phone, values.password, values.username)
+            .then((res) => {
+              if (res.success == 1) {
+                this.$router.push("/login");
+              }
+            });
         }
       });
     },
     handleConfirmBlur(e) {
       const value = e.target.value;
       this.confirmDirty = this.confirmDirty || !!value;
+    },
+    validateUserName(rule, value, callback) {
+      const form = this.form;
+      if (value) {
+        userApi.checkName(form.getFieldValue("username")).then(
+          () => {},
+          (err) => {
+            callback(err);
+          }
+        );
+      } else {
+        callback();
+      }
     },
     compareToFirstPassword(rule, value, callback) {
       const form = this.form;
@@ -223,9 +240,13 @@ export default {
       const form = this.form;
       if (value && !this.isPhoneNumber(form.getFieldValue("phone"))) {
         callback("手机号不合法");
-      } else {
-        callback();
       }
+      userApi.checkAccount(form.getFieldValue("phone")).then(
+        () => {},
+        (err) => {
+          callback(err);
+        }
+      );
     },
     validateCaptcha(rule, value, callback) {
       const form = this.form;

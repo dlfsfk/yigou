@@ -1,27 +1,69 @@
 <template>
   <div class="container">
-    <form @submit.prevent="handleSubmit" class="lform">
+    <a-form
+      id="components-form-demo-normal-login"
+      :form="form"
+      class="lform"
+      @submit="handleSubmit"
+    >
       <div class="title">
         <h3>账号登录</h3>
         <p>
           还没帐号?
-          <router-link class="login_btn" to="/register">注册</router-link>
+          <router-link class="toRegister" to="/register">注册</router-link>
         </p>
       </div>
-      <div class="form-item">
-        <label>账号：</label>
-        <input type="text" v-model="loginId" />
-      </div>
-      <div class="form-item">
-        <label>密码：</label>
-        <input type="password" autocomplete="new-password" v-model="loginPwd" />
-      </div>
-      <div class="form-item">
-        <button :disabled="loading">
-          {{ loading ? "loading..." : "登录" }}
+      <a-form-item>
+        <a-input
+          v-decorator="[
+            'account',
+            {
+              rules: [
+                { required: true, message: '请输入账号!' },
+                {
+                  validator: validateAccount,
+                },
+              ],
+            },
+          ]"
+          placeholder="账号"
+        >
+          <a-icon
+            slot="prefix"
+            type="user"
+            style="color: rgba(0, 0, 0, 0.25)"
+          />
+        </a-input>
+      </a-form-item>
+      <a-form-item>
+        <a-input
+          v-decorator="[
+            'password',
+            {
+              rules: [
+                { required: true, message: '请输入密码' },
+                {
+                  validator: validatePassword,
+                },
+              ],
+            },
+          ]"
+          type="password"
+          placeholder="密码"
+        >
+          <a-icon
+            slot="prefix"
+            type="lock"
+            style="color: rgba(0, 0, 0, 0.25)"
+          />
+        </a-input>
+      </a-form-item>
+      <a-form-item class="loginModel">
+        <button :disabled="loading" class="login-btn">
+          {{ loading ? "登录中..." : "登录" }}
         </button>
-      </div>
-    </form>
+      </a-form-item>
+    </a-form>
   </div>
 </template>
 <script>
@@ -40,24 +82,40 @@ import { mapState } from "vuex";
  *  */
 
 export default {
-  data() {
-    return {
-      loginId: "",
-      loginPwd: "",
-    };
+  beforeCreate() {
+    this.form = this.$form.createForm(this, { name: "normal_login" });
   },
   computed: mapState("loginUser", ["loading"]),
   methods: {
-    async handleSubmit() {
-      const resp = await this.$store.dispatch("loginUser/login", {
-        loginId: this.loginId,
-        loginPwd: this.loginPwd,
+    handleSubmit(e) {
+      e.preventDefault();
+      this.form.validateFields((err, values) => {
+        if (!err) {
+          this.$store
+            .dispatch("loginUser/login", {
+              loginId: values.account,
+              loginPwd: values.password,
+            })
+            .then(
+              (res) => {
+                const path = this.$route.query.returnurl || "/";
+                this.$router.push(path);
+              },
+              (err) => {
+                alert("账号密码错误");
+                this.$store.commit("loginUser/setLoading", false);
+              }
+            );
+        }
       });
-      if (resp) {
-        const path = this.$route.query.returnurl || "/";
-        this.$router.push(path);
+    },
+    validatePhone(rule, value, callback) {
+      const form = this.form;
+      if (value) {
+        console.log(form.getFieldValue("phone"));
+        callback("账号不存在");
       } else {
-        alert("账号密码错误");
+        callback();
       }
     },
   },
@@ -102,33 +160,20 @@ export default {
   margin-left: 30px;
   color: #9b9b9b;
 }
-.login_btn {
+.toRegister {
   margin-left: 10px;
   color: #2e58ff;
 }
-.form-item {
-  /* margin: 1em auto; */
-  padding: 15px;
-  width: 300px;
-  display: flex;
-  align-items: center;
-}
-.form-item input {
-  height: 26px;
-  font-size: 14px;
-  flex: 1 1 auto;
-}
-.form-item label {
-  width: 70px;
-}
-.form-item button {
+.login-btn {
   flex: 1 1 auto;
   background: #50936c;
   border: none;
   outline: none;
   color: #fff;
   border-radius: 5px;
+  width: 300px;
   height: 35px;
+  text-align: center;
   font-size: 16px;
 }
 </style>

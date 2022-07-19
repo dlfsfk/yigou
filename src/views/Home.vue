@@ -1,81 +1,77 @@
 <template>
   <div id="home">
-    <div class="body">
-      <h1 id="title">一燕不能成春，一树不能成林</h1>
-      <div class="banner">
-        <a-input-group compact>
-          <a-select default-value="宜昌" v-model="city" style="width: 80px">
-            <a-select-option value="恩施"> 恩施 </a-select-option>
-            <a-select-option value="鄂州"> 鄂州 </a-select-option>
-            <a-select-option value="黄冈"> 黄冈 </a-select-option>
-            <a-select-option value="黄石"> 黄石 </a-select-option>
-            <a-select-option value="荆门"> 荆门 </a-select-option>
-            <a-select-option value="荆州"> 荆州 </a-select-option>
-            <a-select-option value="潜江"> 潜江 </a-select-option>
-            <a-select-option value="神农架"> 神农架 </a-select-option>
-            <a-select-option value="十堰"> 十堰 </a-select-option>
-            <a-select-option value="随州"> 随州 </a-select-option>
-            <a-select-option value="天门"> 天门 </a-select-option>
-            <a-select-option value="武汉"> 武汉 </a-select-option>
-            <a-select-option value="襄阳"> 襄阳 </a-select-option>
-            <a-select-option value="咸宁"> 咸宁 </a-select-option>
-            <a-select-option value="仙桃"> 仙桃 </a-select-option>
-            <a-select-option value="孝感"> 孝感 </a-select-option>
-            <a-select-option value="宜昌"> 宜昌 </a-select-option>
-          </a-select>
-          <a-input-search
-            style="width: 40%"
-            placeholder="请输入地区名称开始找房"
-            enter-button
-            v-model="area"
-            @search="onSearch"
-          />
-        </a-input-group>
-        <a-alert
-          type="error"
-          message="没有数据，请检查城市小区是否输入正确！"
-          banner
-          style="width: 562px; margin-left: 494px"
-          v-if="!hasdata"
-        />
-      </div>
-
-      <div class="subTitle">{{ city + area }}房产均价走势</div>
-      <div style="opacity: 0.8; width: 80%; margin: auto" v-if="hasdata">
-        <a-row :gutter="150">
-          <a-col :span="6">
-            <a-card title="楼盘总数" :bordered="false" :hoverable="false">
-              <p>{{ analyze.totalProperty }}间</p>
-            </a-card>
-          </a-col>
-          <a-col :span="6">
-            <a-card title="上周均价" :bordered="false" :hoverable="false">
-              <p>{{ analyze.averagePriceLastWeek }}(元/m²)</p>
-            </a-card>
-          </a-col>
-          <a-col :span="6">
-            <a-card title="本周均价" :bordered="false" :hoverable="false">
-              <p>{{ analyze.averagePriceThisWeek }}(元/m²)</p>
-            </a-card>
-          </a-col>
-          <a-col :span="6">
-            <a-card title="涨跌幅" :bordered="false" :hoverable="false">
-              <a-statistic
-                :value="this.analyze.quoteChange.value"
-                :precision="2"
-                suffix="%"
-                :value-style="{ color: arrowColor }"
-              >
-                <template #prefix>
-                  <a-icon type="arrow-up" v-if="analyze.quoteChange.symbol" />
-                  <a-icon type="arrow-down" v-else />
-                </template>
-              </a-statistic>
-            </a-card>
-          </a-col>
-        </a-row>
-      </div>
-      <div v-else class="info">该地区没有房价走势数据</div>
+    <div>
+      <a-spin :spinning="spinning">
+        <div class="spin-content">
+          <div class="body">
+            <h1 id="title">一燕不能成春，一树不能成林</h1>
+            <div class="banner">
+              <a-input-group compact>
+                <a-select
+                  default-value="宜昌"
+                  v-model="city"
+                  style="width: 80px"
+                >
+                  <a-select-option v-for="city in cities" :key="city" :value="city"> {{city}} </a-select-option>
+                </a-select>
+                <a-input-search
+                  style="width: 40%"
+                  placeholder="请输入地区名称开始找房"
+                  enter-button
+                  v-model="area"
+                  @search="onSearch"
+                />
+              </a-input-group>
+              <a-alert
+                type="error"
+                message="没有数据，请检查城市小区是否输入正确！"
+                banner
+                style="width: 562px; margin-left: 494px"
+                v-if="!hasdata"
+              />
+            </div>
+            <div class="subTitle">{{ city + area }}房产均价走势</div>
+            <div style="opacity: 0.8; width: 80%; margin: auto" v-if="hasdata">
+              <a-row :gutter="150">
+                <a-col :span="6">
+                  <a-card title="楼盘总数" :bordered="false" :hoverable="false">
+                    <p>{{ analyze.totalProperty }}间</p>
+                  </a-card>
+                </a-col>
+                <a-col :span="6">
+                  <a-card title="上周均价" :bordered="false" :hoverable="false">
+                    <p>{{ analyze.averagePriceLastWeek }}(元/m²)</p>
+                  </a-card>
+                </a-col>
+                <a-col :span="6">
+                  <a-card title="本周均价" :bordered="false" :hoverable="false">
+                    <p>{{ analyze.averagePriceThisWeek }}(元/m²)</p>
+                  </a-card>
+                </a-col>
+                <a-col :span="6">
+                  <a-card title="涨跌幅" :bordered="false" :hoverable="false">
+                    <a-statistic
+                      :value="this.analyze.quoteChange.value"
+                      :precision="2"
+                      suffix="%"
+                      :value-style="{ color: arrowColor }"
+                    >
+                      <template #prefix>
+                        <a-icon
+                          type="arrow-up"
+                          v-if="analyze.quoteChange.symbol"
+                        />
+                        <a-icon type="arrow-down" v-else />
+                      </template>
+                    </a-statistic>
+                  </a-card>
+                </a-col>
+              </a-row>
+            </div>
+            <div v-else class="info">该地区没有房价走势数据</div>
+          </div>
+        </div>
+      </a-spin>
     </div>
 
     <div class="charts" v-if="Object.keys(graphs).length != 0">
@@ -97,6 +93,7 @@ export default {
   },
   data() {
     return {
+      cities:["恩施","鄂州","黄冈","黄石","荆门","荆州","潜江","神农架","十堰","随州","天门","武汉","襄阳","咸宁","仙桃","孝感","宜昌"],
       city: "宜昌",
       area: "西陵",
       analyze: {
@@ -108,26 +105,34 @@ export default {
           value: 0,
         },
       },
-      hasdata: false,
+      hasdata: true,
       graphs: {},
+      spinning: false,
     };
   },
   methods: {
     async onSearch() {
+      this.spinning = true;
       const result = await housePriceTrendApi.getHousePriceTrend(
         this.city,
         this.area
       );
-      console.log(result);
-      this.analyze.totalProperty = result.analyze.totalProperty;
-      this.analyze.averagePriceLastWeek = result.analyze.averagePriceLastWeek;
-      this.analyze.averagePriceThisWeek = result.analyze.averagePriceThisWeek;
-      this.analyze.quoteChange.symbol =
-        parseFloat(result.analyze.quoteChange) >= 0 ? true : false;
-      this.analyze.quoteChange.value = Math.abs(
-        parseFloat(result.analyze.quoteChange)
-      );
-      this.graphs = result.graph;
+      if (!result.msg) {
+        this.hasdata = true;
+        this.analyze.totalProperty = result.analyze.totalProperty;
+        this.analyze.averagePriceLastWeek = result.analyze.averagePriceLastWeek;
+        this.analyze.averagePriceThisWeek = result.analyze.averagePriceThisWeek;
+        this.analyze.quoteChange.symbol =
+          parseFloat(result.analyze.quoteChange) >= 0 ? true : false;
+        this.analyze.quoteChange.value = Math.abs(
+          parseFloat(result.analyze.quoteChange)
+        );
+        this.graphs = result.graph;
+        this.spinning = false;
+      } else {
+        this.hasdata = false;
+        this.spinning = false;
+      }
     },
     makeOptions(i) {
       return {
@@ -219,6 +224,9 @@ export default {
         },
       };
     },
+    changeSpinning() {
+      this.spinning = !this.spinning;
+    },
   },
   computed: {
     arrowColor() {
@@ -226,18 +234,30 @@ export default {
     },
   },
   mounted() {
-    console.log("开始异步请求");
-    housePriceTrendApi.getHousePriceTrend(this.city, this.area).then((res) => {
-      this.analyze.totalProperty = res.analyze.totalProperty;
-      this.analyze.averagePriceLastWeek = res.analyze.averagePriceLastWeek;
-      this.analyze.averagePriceThisWeek = res.analyze.averagePriceThisWeek;
-      this.analyze.quoteChange.symbol =
-        parseFloat(res.analyze.quoteChange) >= 0 ? true : false;
-      this.analyze.quoteChange.value = Math.abs(
-        parseFloat(res.analyze.quoteChange)
-      );
-      this.graphs = res.graph;
-    });
+    this.spinning = true;
+    housePriceTrendApi.getHousePriceTrend(this.city, this.area).then(
+      (res) => {
+        if (!res.msg) {
+          this.hasdata = true;
+          this.analyze.totalProperty = res.analyze.totalProperty;
+          this.analyze.averagePriceLastWeek = res.analyze.averagePriceLastWeek;
+          this.analyze.averagePriceThisWeek = res.analyze.averagePriceThisWeek;
+          this.analyze.quoteChange.symbol =
+            parseFloat(res.analyze.quoteChange) >= 0 ? true : false;
+          this.analyze.quoteChange.value = Math.abs(
+            parseFloat(res.analyze.quoteChange)
+          );
+          this.graphs = res.graph;
+          this.spinning = false;
+        } else {
+          this.hasdata = false;
+          this.spinning = false;
+        }
+      },
+      (err) => {
+        this.spinning = false;
+      }
+    );
   },
 };
 </script>
