@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="house_image">
-      <img src="../assets/bg.jpg" alt="House" />
+      <img :src="getImages(img)" alt="House" />
     </div>
     <div class="house_info">
       <div>
@@ -16,20 +16,18 @@
         >
       </div>
       <div class="location">
-        <span>江汉</span>
+        <span>{{ city }}</span>
         <i class="split">/</i>
-        <span>唐家墩</span>
-        <i class="split">/</i>
-        <span> 江汉区三眼桥路6号线唐家墩站</span>
+        <span>{{ location }}</span>
       </div>
-      <div style="margin-top: 16px">
-        <span class="room">
+      <div style="margin-top: 30px; height: 20px">
+        <span class="room" v-for="room in rooms" :key="room">
           {{ room }}
         </span>
       </div>
-      <div style="margin-top: 16px">
+      <div style="margin-top: 30px; height: 20px">
         <span class="area">
-          {{ area }}
+          {{ area == "None" ? "" : area }}
         </span>
       </div>
       <div>
@@ -39,15 +37,15 @@
       </div>
     </div>
     <div class="house_price">
-      <div style="height: 55px; margin-top: 75px">
+      <div style="height: 55px; margin-top: 100px; margin-right: 0">
         <div>
           <span class="number">
-            {{ number }}
+            {{ number ? number : "价格待定" }}
           </span>
-          <span class="desc">&nbsp;元/㎡(均价)</span>
+          <span v-if="number" class="desc">&nbsp;元/㎡(均价)</span>
         </div>
         <div>
-          <span class="price">总价{{ data }}(万/套)</span>
+          <span class="price">{{ data == "None" ? "" : data }}</span>
         </div>
       </div>
     </div>
@@ -56,11 +54,23 @@
 <script>
 export default {
   props: {
+    img: {
+      type: String,
+      required: true,
+    },
     houseName: {
       type: String,
       required: true,
     },
-    room: {
+    city: {
+      type: String,
+      required: true,
+    },
+    location: {
+      type: String,
+      required: true,
+    },
+    rooms: {
       type: Array,
       required: true,
     },
@@ -73,7 +83,7 @@ export default {
       required: true,
     },
     number: {
-      type: Number,
+      type: String,
       required: true,
     },
     data: {
@@ -84,20 +94,30 @@ export default {
   data() {
     return {};
   },
+  methods: {
+    getImages(_url) {
+      if (_url !== undefined) {
+        let _u = _url.substring(7);
+        return "https://images.weserv.nl/?url=" + _u;
+      }
+    },
+  },
 };
 </script>
 <style scoped>
 .container {
   display: flex;
-  margin: 10px;
-  height: 200px;
+  margin: 20px;
+  height: 250px;
 }
+.house_image,
 .house_image img {
-  width: 300px;
-  height: 200px;
+  width: 450px;
+  height: 100%;
 }
 .house_info {
   margin-left: 40px;
+  width: 400px;
   text-align: left;
 }
 .name {
@@ -140,7 +160,7 @@ export default {
   display: inline-block;
   height: 30px;
   margin-right: 10px;
-  margin-top: 25px;
+  margin-top: 50px;
   padding: 0 12px;
   line-height: 30px;
   font-size: 12px;
@@ -149,6 +169,7 @@ export default {
 }
 .house_price {
   margin-left: 80px;
+  width: 180px;
   height: 200px;
   text-align: right;
 }

@@ -12,7 +12,13 @@
                   v-model="city"
                   style="width: 80px"
                 >
-                  <a-select-option v-for="city in cities" :key="city" :value="city"> {{city}} </a-select-option>
+                  <a-select-option
+                    v-for="city in cities"
+                    :key="city"
+                    :value="city"
+                  >
+                    {{ city }}
+                  </a-select-option>
                 </a-select>
                 <a-input-search
                   style="width: 40%"
@@ -93,7 +99,25 @@ export default {
   },
   data() {
     return {
-      cities:["恩施","鄂州","黄冈","黄石","荆门","荆州","潜江","神农架","十堰","随州","天门","武汉","襄阳","咸宁","仙桃","孝感","宜昌"],
+      cities: [
+        "恩施",
+        "鄂州",
+        "黄冈",
+        "黄石",
+        "荆门",
+        "荆州",
+        "潜江",
+        "神农架",
+        "十堰",
+        "随州",
+        "天门",
+        "武汉",
+        "襄阳",
+        "咸宁",
+        "仙桃",
+        "孝感",
+        "宜昌",
+      ],
       city: "宜昌",
       area: "西陵",
       analyze: {
@@ -310,6 +334,5 @@ button.ant-btn:hover {
   text-shadow: 1px 1px 10px black;
 }
 </style>
-
 
 
