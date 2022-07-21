@@ -33,7 +33,7 @@ export default {
 
 <style scoped>
 #chart {
-  width: 600px;
+  width: 700px;
   height: 400px;
 }
 </style>

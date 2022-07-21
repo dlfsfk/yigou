@@ -121,6 +121,8 @@ export default {
       maxPrice: 30000,
       minPrice: 8000,
       total: 1000,
+      selectByPrice: false,
+      selectByArea: false,
     };
   },
   mounted() {
@@ -137,15 +139,21 @@ export default {
   watch: {
     current(val) {
       this.spinning = true;
-      houseApi.searchHouse(this.current).then(
-        (res) => {
-          this.houseData = res.info;
-          this.total = res.total;
-          this.spinning = false;
-          this.backToTop();
-        },
-        (err) => {}
-      );
+      if (this.selectByPrice) {
+        this.priceChange();
+      } else if (this.selectByArea) {
+        this.areaChange();
+      } else {
+        houseApi.searchHouse(this.current).then(
+          (res) => {
+            this.houseData = res.info;
+            this.total = res.total;
+            this.spinning = false;
+            this.backToTop();
+          },
+          (err) => {}
+        );
+      }
     },
   },
   methods: {
@@ -161,7 +169,7 @@ export default {
     areaChange() {
       if (this.area == "全部") {
         this.spinning = true;
-        this.current = 1;
+        this.selectByArea = false;
         houseApi.searchHouse(this.current).then(
           (res) => {
             this.houseData = res.info;
@@ -173,9 +181,10 @@ export default {
         );
       } else if (this.area.includes("以下")) {
         this.spinning = true;
-        this.current = 1;
+        this.selectByArea = true;
         houseApi.searchHouseByArea(this.current, this.minArea, 0).then(
           (res) => {
+            console.log(res);
             this.houseData = res.info;
             this.total = res.total;
             this.spinning = false;
@@ -184,11 +193,12 @@ export default {
         );
       } else {
         this.spinning = true;
-        this.current = 1;
+        this.selectByArea = true;
         let area = this.area.substr(0, this.area.length - 1);
         area = area.split("-");
         houseApi.searchHouseByArea(this.current, area[1], area[0]).then(
           (res) => {
+            console.log(res);
             this.houseData = res.info;
             this.total = res.total;
             this.spinning = false;
@@ -200,6 +210,7 @@ export default {
     priceChange() {
       if (this.price == "全部") {
         this.spinning = true;
+        this.selectByPrice = false;
         this.current = 1;
         houseApi.searchHouse(this.current).then(
           (res) => {
@@ -212,9 +223,10 @@ export default {
         );
       } else if (this.price.includes("以下")) {
         this.spinning = true;
-        this.current = 1;
+        this.selectByPrice = true;
         houseApi.searchHouseByPrice(this.current, this.minPrice, 0).then(
           (res) => {
+            console.log(res);
             this.houseData = res.info;
             this.total = res.total;
             this.spinning = false;
@@ -223,7 +235,7 @@ export default {
         );
       } else {
         this.spinning = true;
-        this.current = 1;
+        this.selectByPrice = true;
         let price = this.price.substr(0, this.price.length - 4);
         price = price.split("-");
         houseApi.searchHouseByPrice(this.current, price[1], price[0]).then(
