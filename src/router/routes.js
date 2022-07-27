@@ -5,6 +5,8 @@ import Graphs from "../views/Graphs.vue";
 import Map from "../views/Map.vue";
 import Buildings from "../views/Buildings.vue";
 import Loading from "../views/Loading.vue";
+import Province from "../views/Province.vue";
+import City from "../views/City.vue";
 
 export default [
   {
@@ -31,6 +33,20 @@ export default [
   {
     path: "/map",
     component: Map,
+    meta: {
+      auth: true,
+    },
+  },
+  {
+    path: "/province",
+    component: Province,
+    meta: {
+      auth: true,
+    },
+  },
+  {
+    path: "/city",
+    component: City,
     meta: {
       auth: true,
     },
