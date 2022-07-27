@@ -65,7 +65,6 @@ export default {
             dataList[i].value = result[j].value;
           }
         }
-        dataList[i].value = Math.ceil(Math.random() * 1000 - 1);
       }
       var myChart = this.$echarts.init(document.getElementById("mapChart"));
       var option = {

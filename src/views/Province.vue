@@ -11,6 +11,12 @@ export default {
   name: "province",
   data() {
     return {
+      autonomousRegion: {
+        湘西市: "湘西土家族苗族自治州",
+        恩施市: "恩施土家族苗族自治州",
+        大兴安岭市: "大兴安岭地区",
+        延边市: "延边朝鲜族自治州",
+      },
       id: "echarts_" + new Date().getTime() + Math.floor(Math.random() * 1000),
       echartObj: null,
       option: {
@@ -109,10 +115,15 @@ export default {
   },
   mounted() {
     const province = this.$route.query.province;
-    this.initDate();
-    this.resizeListener();
     mapApi.getCityData(province).then((res) => {
-      console.log(res);
+      for (let i = 0; i < res.length; i++) {
+        if (Object.keys(this.autonomousRegion).includes(res[i].name)) {
+          res[i].name = this.autonomousRegion[res[i].name];
+        }
+      }
+      this.option.series[0].data = res;
+      this.initDate();
+      this.resizeListener();
     });
   },
   methods: {

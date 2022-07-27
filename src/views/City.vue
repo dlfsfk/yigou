@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import * as mapApi from "@/api/mapData.js";
 import { cityMap } from "@/utils/城市数据/china-main-city-map.js";
 export default {
   name: "city",
@@ -108,8 +109,12 @@ export default {
     };
   },
   mounted() {
-    this.initDate();
-    this.resizeListener();
+    const city = this.$route.query.city;
+    mapApi.getCountyData(city).then((res) => {
+      this.option.series[0].data = res;
+      this.initDate();
+      this.resizeListener();
+    });
   },
   methods: {
     initDate() {

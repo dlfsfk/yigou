@@ -6,3 +6,7 @@ export async function getProvinceData() {
 export async function getCityData(province) {
     return axios.get('/city', { params: { province } });
 }
+
+export async function getCountyData(county) {
+    return axios.get('/county', { params: { county } });
+}
