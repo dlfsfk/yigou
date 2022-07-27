@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import * as mapApi from "@/api/mapData.js";
 export default {
   name: "province",
   data() {
@@ -107,8 +108,12 @@ export default {
     };
   },
   mounted() {
+    const province = this.$route.query.province;
     this.initDate();
     this.resizeListener();
+    mapApi.getCityData(province).then((res) => {
+      console.log(res);
+    });
   },
   methods: {
     initDate() {

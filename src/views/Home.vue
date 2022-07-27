@@ -79,13 +79,14 @@
         </div>
       </a-spin>
     </div>
-
     <div class="charts" v-if="Object.keys(graphs).length != 0">
-      <Charts
+      <div
+        class="chartContainer"
         v-for="(item, index) in graphs.title"
         :key="item"
-        :options="makeOptions(index)"
-      />
+      >
+        <Charts :options="makeOptions(index)" />
+      </div>
     </div>
   </div>
 </template>
@@ -327,6 +328,10 @@ button.ant-btn:hover {
 .charts {
   display: flex;
   margin: 100px;
+}
+.chartContainer {
+  width: 600px;
+  height: 400px;
 }
 .info {
   color: #fff;

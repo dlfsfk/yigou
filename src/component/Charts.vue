@@ -6,12 +6,12 @@
 <script>
 export default {
   name: "ec",
-  props:{
-	  options:{
-	  	 type:Object,
-		 default:{},
-		 required:true,
-	  }
+  props: {
+    options: {
+      type: Object,
+      default: {},
+      required: true,
+    },
   },
   data() {
     return {
@@ -33,7 +33,7 @@ export default {
 
 <style scoped>
 #chart {
-  width: 700px;
-  height: 400px;
+  width: 45vw;
+  height: 50vh;
 }
 </style>

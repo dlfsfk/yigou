@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import * as mapApi from "@/api/mapData.js";
 export default {
   data() {
     return {
@@ -51,12 +52,19 @@ export default {
     };
   },
   mounted() {
-    this.initEchart();
+    mapApi.getProvinceData().then((res) => {
+      this.initEchart(res);
+    });
   },
   methods: {
-    initEchart() {
+    initEchart(result) {
       let dataList = this.dataList;
       for (let i = 0; i < dataList.length; i++) {
+        for (let j = 0; j < result.length; j++) {
+          if (dataList[i].name == result[j].name) {
+            dataList[i].value = result[j].value;
+          }
+        }
         dataList[i].value = Math.ceil(Math.random() * 1000 - 1);
       }
       var myChart = this.$echarts.init(document.getElementById("mapChart"));

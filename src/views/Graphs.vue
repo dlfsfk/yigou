@@ -1,53 +1,66 @@
 <template>
   <div style="position: relative">
-    <div style="margin-left: 10vh">
-      <div style="margin-top: 50px">
-        <a-input-search
-          placeholder="请输入要查询城市"
-          style="width: 40%"
-          enter-button
-          v-model="city"
-          @search="onSearch"
-        />
-      </div>
+    <div style="margin-top: 50px">
+      <span>省份：</span>
+      <a-select default-value="湖北" class="select">
+        <a-select-option value="湖北"> 湖北 </a-select-option>
+      </a-select>
+      <span>城市：</span>
+      <a-select default-value="武汉" class="select" v-model="city">
+        <a-select-option :value="city" v-for="city in cities" :key="city">
+          {{ city }}
+        </a-select-option>
+      </a-select>
+      <a-button slot="enterButton" @click="onSearch"> 搜索 </a-button>
+    </div>
+    <div class="title">
+      <span class="titleItem">
+        <a-icon type="line-chart" />
+        <span>房价走势</span>
+        <span class="cInfo">新房</span>
+        <span class="cInfo">二手房</span>
+      </span>
+      <span class="titleItem">
+        <span>月度|年度</span>
+      </span>
+      <span class="titleItem">
+        <a-icon type="ordered-list" />
+        <span>房价排行榜</span>
+      </span>
+    </div>
+    <div class="container">
       <div class="charts">
-        <div v-if="Object.keys(predictData).length != 0">
-          <div>
-            <Charts
-              v-for="(item, index) in predictData.title"
-              :key="item"
-              :options="makeOptions(index)"
-            />
-          </div>
+        <div
+          v-for="(item, index) in predictData.title"
+          :key="item"
+          class="chart"
+        >
+          <Charts :options="makeOptions(index)" />
+        </div>
+        <div class="chart">
+          <Charts :options="makeBarOptions()" v-if="Object.keys(rankData).length != 0" />
         </div>
       </div>
-      <div style="margin-left: 100px">
-        <Charts :options="makeBarOptions()" />
+      <div class="ranking">
+        <table border="0" cellpadding="10" cellspacing="1" align="center">
+          <tr bgcolor="skyblue">
+            <th>排名</th>
+            <th>城市</th>
+            <th>二手房(元)</th>
+            <th>同比(去年)</th>
+            <th>环比(上月)</th>
+            <th>总价(元)</th>
+          </tr>
+          <tr v-for="item in ranking" :key="item.id">
+            <td>{{ item.id }}</td>
+            <td>{{ item.city }}</td>
+            <td>{{ item.house }}</td>
+            <td>{{ item.tongbi }}</td>
+            <td>{{ item.huanbi }}</td>
+            <td bgcolor="#FFC0CB">{{ item.total }}</td>
+          </tr>
+        </table>
       </div>
-    </div>
-
-    <div class="ranking">
-      <p style="font-size: 30px; font-weight: bold; margin-bottom: 15px">
-        房价排行榜
-      </p>
-      <table border="0" cellpadding="10" cellspacing="1" align="center">
-        <tr bgcolor="skyblue">
-          <th>排名</th>
-          <th>城市</th>
-          <th>二手房(元)</th>
-          <th>同比(去年)</th>
-          <th>环比(上月)</th>
-          <th>总价(元)</th>
-        </tr>
-        <tr v-for="item in ranking" :key="item.id">
-          <td>{{ item.id }}</td>
-          <td>{{ item.city }}</td>
-          <td>{{ item.house }}</td>
-          <td>{{ item.tongbi }}</td>
-          <td>{{ item.huanbi }}</td>
-          <td bgcolor="#FFC0CB">{{ item.total }}</td>
-        </tr>
-      </table>
     </div>
   </div>
 </template>
@@ -203,6 +216,21 @@ export default {
         },
       ],
       rankData: {},
+      cities: [
+        "恩施",
+        "鄂州",
+        "黄冈",
+        "黄石",
+        "荆门",
+        "荆州",
+        "十堰",
+        "随州",
+        "武汉",
+        "襄阳",
+        "咸宁",
+        "孝感",
+        "宜昌",
+      ],
     };
   },
   methods: {
@@ -315,21 +343,39 @@ export default {
 </script>
 
 <style scoped>
+.select {
+  width: 15vw;
+  margin-right: 5vw;
+}
 .title {
-  margin-top: 20px;
+  height: 40px;
+  line-height: 40px;
+  background: #ccc;
+  margin: 20px 5px;
+  display: flex;
+  justify-content: space-around;
+  font-size: 1.2em;
   font-weight: bold;
 }
-.charts {
-  width: 100vh;
+.titleItem span {
+  margin: 0 10px;
+}
+.container {
   display: flex;
 }
+.charts {
+  width: 60vw;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+.chart {
+  border: 1px solid #000;
+  margin: 0 auto;
+}
 .ranking {
-  position: fixed;
-  bottom: 10px;
-  right: 40px;
-  width: 25vw;
-  height: 80vh;
-  overflow: auto;
+  width: 40vw;
+  margin: 0 auto;
 }
 </style>
 
