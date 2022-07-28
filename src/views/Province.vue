@@ -11,11 +11,32 @@ export default {
   name: "province",
   data() {
     return {
-      autonomousRegion: {
+      reName: {
         湘西市: "湘西土家族苗族自治州",
         恩施市: "恩施土家族苗族自治州",
         大兴安岭市: "大兴安岭地区",
         延边市: "延边朝鲜族自治州",
+        兴安盟市: "兴安盟",
+        巴彦淖尔市市: "巴彦淖尔市",
+        锡林郭勒盟市: "锡林郭勒盟",
+        临夏市: "临夏回族自治州",
+        黔东南市: "黔东南苗族侗族自治州",
+        黔南市: "黔南布依族苗族自治州",
+        黔西南市: "黔西南布依族苗族自治州",
+        大理市: "大理白族自治州",
+        西双版纳市: "西双版纳傣族自治州",
+        德宏市: "德宏傣族景颇族自治州",
+        文山市: "文山壮族苗族自治州",
+        红河市: "红河哈尼族彝族自治州",
+        楚雄市: "楚雄彝族自治州",
+        迪庆市: "迪庆藏族自治州",
+        海南市: "海南藏族自治州",
+        海西市: "海西蒙古族藏族自治州",
+        密云区: "密云县",
+        延庆区: "延庆县",
+        蓟州区:"蓟县",
+        宁河区:"宁河县",
+        静海区:"静海县"
       },
       id: "echarts_" + new Date().getTime() + Math.floor(Math.random() * 1000),
       echartObj: null,
@@ -115,16 +136,22 @@ export default {
   },
   mounted() {
     const province = this.$route.query.province;
-    mapApi.getCityData(province).then((res) => {
-      for (let i = 0; i < res.length; i++) {
-        if (Object.keys(this.autonomousRegion).includes(res[i].name)) {
-          res[i].name = this.autonomousRegion[res[i].name];
+    mapApi.getCityData(province).then(
+      (res) => {
+        for (let i = 0; i < res.length; i++) {
+          if (Object.keys(this.reName).includes(res[i].name)) {
+            res[i].name = this.reName[res[i].name];
+          }
         }
+        this.option.series[0].data = res;
+        this.initDate();
+        this.resizeListener();
+      },
+      (err) => {
+        this.initDate();
+        this.resizeListener();
       }
-      this.option.series[0].data = res;
-      this.initDate();
-      this.resizeListener();
-    });
+    );
   },
   methods: {
     initDate() {

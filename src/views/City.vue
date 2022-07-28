@@ -12,6 +12,7 @@ export default {
   name: "city",
   data() {
     return {
+      reName: { 密云区: "密云县", 延庆区: "延庆县" },
       id: "echarts_" + new Date().getTime() + Math.floor(Math.random() * 1000),
       echartObj: null,
       option: {
@@ -111,6 +112,11 @@ export default {
   mounted() {
     const city = this.$route.query.city;
     mapApi.getCountyData(city).then((res) => {
+      for (let i = 0; i < res.length; i++) {
+        if (Object.keys(this.reName).includes(res[i].name)) {
+          res[i].name = this.reName[res[i].name];
+        }
+      }
       this.option.series[0].data = res;
       this.initDate();
       this.resizeListener();
